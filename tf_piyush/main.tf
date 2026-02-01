@@ -1,15 +1,5 @@
 terraform {
- #terraform backend
-   backend "s3" {
-    bucket = "my-tf-test-shekar-bucket-101"
-    key = "dev/terraform.tfstate"
-    region = "us-east-1"
-    use_lockfile = true
-    encrypt = true
 
-
-
-  }
   required_providers {
     aws = {
       source  = "hashicorp/aws"
@@ -38,4 +28,14 @@ resource "aws_s3_bucket" "tf_test_shekar_bucket" {
      Name = "My bucket"
      Environment = "Dev"
    }
+}
+
+#create ami ubuntu
+resource "aws_instance" "example" {
+  ami           = data.aws_ami.ubuntu.id
+  instance_type = "t3.micro"
+
+  tags = {
+    Name = "HelloWorld"
+  }
 }
