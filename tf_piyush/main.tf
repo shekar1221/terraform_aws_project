@@ -1,4 +1,15 @@
 terraform {
+ #terraform backend
+   backend "s3" {
+    bucket = "tts-terraform-state"
+    key = "dev/terraform.tfstate"
+    region = "us-east-1"
+    use_lockfile = true
+    encrypt = true
+
+    
+    
+  }
   required_providers {
     aws = {
       source  = "hashicorp/aws"
@@ -6,6 +17,8 @@ terraform {
     }
   }
 }
+
+
 
 # Configure the AWS Provider
 provider "aws" {
