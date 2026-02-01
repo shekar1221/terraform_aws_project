@@ -2,13 +2,197 @@
 
 
 
- while changing backend s3 its asks to run 
- root@ip-172-31-20-224:~/terraform_aws_project/tf_piyush# terraform init
-Initializing the backend...
+ root@ip-172-31-20-224:~/terraform_aws_project/tf_piyush# terraform plan
+aws_vpc.example: Refreshing state... [id=vpc-0178b77b94099c4fe]
+data.aws_ami.ubuntu: Reading...
+data.aws_ami.ubuntu: Read complete after 1s [id=ami-0030e4319cbf4dbf2]
+aws_instance.example: Refreshing state... [id=i-086f43819f38762c5]
+
+Terraform used the selected providers to generate the following execution plan. Resource
+actions are indicated with the following symbols:
+  + create
+  ~ update in-place
+
+Terraform will perform the following actions:
+
+  # aws_instance.example will be updated in-place
+  ~ resource "aws_instance" "example" {
+        id                                   = "i-086f43819f38762c5"
+      ~ tags                                 = {
+          ~ "Name" = "stage-ec2-tf-instance" -> "preprod-ec2-tf-instance"
+        }
+      ~ tags_all                             = {
+          ~ "Name" = "stage-ec2-tf-instance" -> "preprod-ec2-tf-instance"
+        }
+        # (39 unchanged attributes hidden)
+
+        # (9 unchanged blocks hidden)
+    }
+
+  # aws_s3_bucket.demo will be created
+  + resource "aws_s3_bucket" "demo" {
+      + acceleration_status         = (known after apply)
+      + acl                         = (known after apply)
+      + arn                         = (known after apply)
+      + bucket                      = "my-tf-test-shekar-bucket-101"
+      + bucket_domain_name          = (known after apply)
+      + bucket_prefix               = (known after apply)
+      + bucket_region               = (known after apply)
+      + bucket_regional_domain_name = (known after apply)
+      + force_destroy               = false
+      + hosted_zone_id              = (known after apply)
+      + id                          = (known after apply)
+      + object_lock_enabled         = (known after apply)
+      + policy                      = (known after apply)
+      + region                      = "us-east-1"
+      + request_payer               = (known after apply)
+      + tags                        = {
+          + "Environment" = "preprod"
+          + "Name"        = "My bucket"
+        }
+      + tags_all                    = {
+          + "Environment" = "preprod"
+          + "Name"        = "My bucket"
+        }
+      + website_domain              = (known after apply)
+      + website_endpoint            = (known after apply)
+
+      + cors_rule (known after apply)
+
+      + grant (known after apply)
+
+      + lifecycle_rule (known after apply)
+
+      + logging (known after apply)
+
+      + object_lock_configuration (known after apply)
+
+      + replication_configuration (known after apply)
+
+      + server_side_encryption_configuration (known after apply)
+
+      + versioning (known after apply)
+
+      + website (known after apply)
+    }
+
+  # aws_vpc.example will be updated in-place
+  ~ resource "aws_vpc" "example" {
+        id                                   = "vpc-0178b77b94099c4fe"
+      ~ tags                                 = {
+          ~ "Environment" = "stage" -> "preprod"
+            "Name"        = "my-vpc"
+        }
+      ~ tags_all                             = {
+          ~ "Environment" = "stage" -> "preprod"
+            # (1 unchanged element hidden)
+        }
+        # (19 unchanged attributes hidden)
+    }
+
+Plan: 1 to add, 2 to change, 0 to destroy.
+
+────────────────────────────────────────────────────────────────────────────────────────────
+
+Note: You didn't use the -out option to save this plan, so Terraform can't guarantee to take
+exactly these actions if you run "terraform apply" now.
+root@ip-172-31-20-224:~/terraform_aws_project/tf_piyush# terraform plan -var=prod
 ╷
-│ Error: Backend configuration changed
+│ Error: Invalid -var option
 │
-│ A change in the backend configuration has been detected, which may require migrating existing state.
-│
-│ If you wish to attempt automatic migration of the state, use "terraform init -migrate-state".
-│ If you wish to store the current configuration with no changes to the state, use "terraform init -reconfigure".
+│ The given -var option "prod" is not correctly specified. Must be a variable name and value
+│ separated by an equals sign, like -var="key=value".
+╵
+root@ip-172-31-20-224:~/terraform_aws_project/tf_piyush# terraform plan -var=environment=prod
+aws_vpc.example: Refreshing state... [id=vpc-0178b77b94099c4fe]
+data.aws_ami.ubuntu: Reading...
+data.aws_ami.ubuntu: Read complete after 0s [id=ami-0030e4319cbf4dbf2]
+aws_instance.example: Refreshing state... [id=i-086f43819f38762c5]
+
+Terraform used the selected providers to generate the following execution plan. Resource actions are indicated with the following symbols:
+  + create
+  ~ update in-place
+
+Terraform will perform the following actions:
+
+  # aws_instance.example will be updated in-place
+  ~ resource "aws_instance" "example" {
+        id                                   = "i-086f43819f38762c5"
+      ~ tags                                 = {
+          ~ "Name" = "stage-ec2-tf-instance" -> "prod-ec2-tf-instance"
+        }
+      ~ tags_all                             = {
+          ~ "Name" = "stage-ec2-tf-instance" -> "prod-ec2-tf-instance"
+        }
+        # (39 unchanged attributes hidden)
+
+        # (9 unchanged blocks hidden)
+    }
+
+  # aws_s3_bucket.demo will be created
+  + resource "aws_s3_bucket" "demo" {
+      + acceleration_status         = (known after apply)
+      + acl                         = (known after apply)
+      + arn                         = (known after apply)
+      + bucket                      = "my-tf-test-shekar-bucket-101"
+      + bucket_domain_name          = (known after apply)
+      + bucket_prefix               = (known after apply)
+      + bucket_region               = (known after apply)
+      + bucket_regional_domain_name = (known after apply)
+      + force_destroy               = false
+      + hosted_zone_id              = (known after apply)
+      + id                          = (known after apply)
+      + object_lock_enabled         = (known after apply)
+      + policy                      = (known after apply)
+      + region                      = "us-east-1"
+      + request_payer               = (known after apply)
+      + tags                        = {
+          + "Environment" = "prod"
+          + "Name"        = "My bucket"
+        }
+      + tags_all                    = {
+          + "Environment" = "prod"
+          + "Name"        = "My bucket"
+        }
+      + website_domain              = (known after apply)
+      + website_endpoint            = (known after apply)
+
+      + cors_rule (known after apply)
+
+      + grant (known after apply)
+
+      + lifecycle_rule (known after apply)
+
+      + logging (known after apply)
+
+      + object_lock_configuration (known after apply)
+
+      + replication_configuration (known after apply)
+
+      + server_side_encryption_configuration (known after apply)
+
+      + versioning (known after apply)
+
+      + website (known after apply)
+    }
+
+  # aws_vpc.example will be updated in-place
+  ~ resource "aws_vpc" "example" {
+        id                                   = "vpc-0178b77b94099c4fe"
+      ~ tags                                 = {
+          ~ "Environment" = "stage" -> "prod"
+            "Name"        = "my-vpc"
+        }
+      ~ tags_all                             = {
+          ~ "Environment" = "stage" -> "prod"
+            # (1 unchanged element hidden)
+        }
+        # (19 unchanged attributes hidden)
+    }
+
+Plan: 1 to add, 2 to change, 0 to destroy.
+
+────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+
+Note: You didn't use the -out option to save this plan, so Terraform can't guarantee to take exactly these actions if you run "terraform apply" now.
+root@ip-172-31-20-224:~/terraform_aws_project/tf_piyush#
