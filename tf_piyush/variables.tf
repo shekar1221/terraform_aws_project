@@ -7,6 +7,6 @@ variable "environment" {
 variable "region" {
     description = "aws region"
     type = string
-    default = "us-east1"
+    default = "us-east-1"
   
 }

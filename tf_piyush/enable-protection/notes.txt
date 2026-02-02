@@ -1,0 +1,94 @@
+Quick decision table
+Situation	Best Action
+Prevent deletion	prevent_destroy = true
+AWS-level protection	deletion_protection = true
+State deleted	terraform import
+AWS deleted	terraform apply
+Wrong destroy	Restore state from S3
+Stop managing	terraform state rm
+
+
+🧠 If you ever WANT to delete (intentionally)
+
+Remove:
+
+lifecycle {
+  prevent_destroy = true
+}
+
+
+Run:
+
+terraform apply
+terraform destroy
+
+
+Safe by default. Dangerous only on purpose 
+
+Resource deleted — how to find & restore 😬
+🔍 Case 1: Resource deleted in AWS but still in state
+
+Terraform will fail like:
+
+Error: instance not found
+
+Fix → Recreate
+terraform apply
+
+
+Terraform will create it again.
+
+🔍 Case 2: Resource exists in AWS but deleted from state
+
+Solution → Import
+terraform import aws_instance.web i-0abc12345
+
+
+Then:
+
+terraform plan
+terraform apply
+
+🔍 Case 3: Resource destroyed by Terraform apply
+Options:
+🔁 1. Rollback using versioned state (BEST)
+If using S3 backend with versioning:
+
+aws s3api list-object-versions --bucket tf-state-prod
+
+
+Restore previous state version in S3 console ✔️
+
+Then:
+
+terraform plan
+terraform apply
+2. Recreate manually
+
+If state + resource both gone:
+
+terraform apply
+
+
+⚠️ Data loss possible (EBS, RDS without snapshots)
+Extra PRO tips (real-world)
+🧠 Use terraform state rm instead of destroy
+
+If you want Terraform to stop managing but not delete:
+
+terraform state rm aws_instance.web
+
+
+Resource stays alive in AWS.
+
+Enable snapshots
+
+For things that matter:
+
+RDS → automated backups
+
+EBS → snapshots
+
+S3 → versioning
+
+Terraform cannot restore data — AWS backups can.
