@@ -36,3 +36,14 @@ variable "associate_public_ip_address" {
    description = "associate public address"
    default = true
 }
+
+#availability zone
+variable "availability_zones" {
+    type = set(string)
+    description = "set availability zones"
+    default = [ "us-east-1a","us-east-1b","us-east-1c" ]
+    # KEY DIFFERENCE FROM LIST:
+    # - Automatically removes duplicates
+    # - Order is not guaranteed
+    # - Cannot access by index like set[0] - need to convert to list first
+}

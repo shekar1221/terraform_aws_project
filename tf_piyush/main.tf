@@ -20,9 +20,10 @@ count = var.instance_count
 monitoring = var.enable_monitoring
 associate_public_ip_address = var.associate_public_ip_address
  
+ #available zone
+ availability_zone = list(availability_zones[0])
  
-  tags = {
-    Name = "${var.environment}-ec2-tf-instance"  }
+ 
 }
 
 # Configure the AWS Provider
